@@ -26,7 +26,7 @@ versionMaj=$(echo "$targetName" | awk -F '-' '{ print $4 }' | awk -F '.' '{ prin
 versionMin=$(echo "$targetName" | awk -F '-' '{ print $4 }' | awk -F '.' '{ print $2 }')
 versionRev=$(echo "$targetName" | awk -F '-' '{ print $4 }' | awk -F '.' '{ print $3 }')
 version="$versionMaj.$versionMin.$versionRev"
-echo "Most recent Postman version V$version"
+echo "Most recent Postman version $version"
 
 current=$(dpkg-query --showformat='${Version}' --show postman 2> /dev/null)
 if [ $? -gt 0 ]; then

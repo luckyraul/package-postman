@@ -21,3 +21,12 @@ jobs:
           run: sh postman-deb.sh
         - name: Results
           run: ls -lah .
+        - name: Upload
+          run: which upload_package
+        - name: Upload
+          run: sh upload.sh
+          env:
+            SERVICE: ${{ secrets.SERVICE }}
+            REALM: ${{ secrets.REALM }}
+            REALM_LOGIN: ${{ secrets.REALM_LOGIN }}
+            REALM_PASS: ${{ secrets.REALM_PASS }}
