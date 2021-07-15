@@ -1,0 +1,23 @@
+name: Package
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: ghcr.io/mygento/deployer:v3
+    steps:
+        - name: Checkout Project
+          uses: actions/checkout@v1
+        - name: Check Composer
+          run: composer -V
+        - name: Check Version
+          run: sh check-version.sh
+        - name: Download and Build
+          run: sh postman-deb.sh
+        - name: Results
+          run: ls -lah .
