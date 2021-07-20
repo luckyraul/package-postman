@@ -3,6 +3,8 @@ name: Package
 on:
   workflow_dispatch:
   push:
+    tags:
+       - '*'
     branches:
       - master
 
@@ -22,9 +24,16 @@ jobs:
         - name: Results
           run: ls -lah .
         - name: Upload
-          run: which upload_package
-        - name: Upload
+          if: startsWith(github.ref, 'refs/tags/') != true
           run: sh upload.sh
+          env:
+            SERVICE: ${{ secrets.SERVICE }}
+            REALM: ${{ secrets.REALM }}
+            REALM_LOGIN: ${{ secrets.REALM_LOGIN }}
+            REALM_PASS: ${{ secrets.REALM_PASS }}
+        - name: Upload && Release
+          if: startsWith(github.ref, 'refs/tags/')
+          run: sh release.sh
           env:
             SERVICE: ${{ secrets.SERVICE }}
             REALM: ${{ secrets.REALM }}
