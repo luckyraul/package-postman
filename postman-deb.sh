@@ -101,9 +101,9 @@ else
 fi
 
 echo "Writing files"
-echo $e "[Desktop Entry]\nType=Application\nName=Postman\nGenericName=Postman API Tester\nIcon=postman\nExec=postman\nPath=/opt/postman\nCategories=Development;" > "postman_$version/opt/postman/postman.desktop"
+echo $e "[Desktop Entry]\nType=Application\nName=Postman\nGenericName=API Tester\nComment=The Collaboration Platform for API Development\nIcon=postman\nExec=postman\nPath=/opt/postman\nCategories=Development;" > "postman_$version/opt/postman/postman.desktop"
 echo $e "Package: postman\nVersion: $version\nSection: devel\nPriority: optional\nArchitecture: amd64\nDepends: gconf2, libgtk2.0-0, desktop-file-utils\nOptional: libcanberra-gtk-module\nMaintainer: Mygento Team\nDescription: Postman\n The Collaboration Platform for API Development" > "postman_$version/DEBIAN/control"
-echo $e "if [ -f \"/usr/bin/postman\" ]; then\n\tsudo rm -f \"/usr/bin/postman\"\nfi\n\nsudo ln -s \"/opt/postman/postman\" \"/usr/bin/postman\"\n\ndesktop-file-install \"/opt/postman/postman.desktop\"" > "postman_$version/DEBIAN/postinst"
+echo $e "if [ -f \"/usr/bin/postman\" ]; then\n\tsudo rm -f \"/usr/bin/postman\"\nfi\n\nsudo ln -s \"/opt/postman/Postman\" \"/usr/bin/postman\"\n\ndesktop-file-install \"/opt/postman/postman.desktop\"" > "postman_$version/DEBIAN/postinst"
 echo $e "if [ -f \"/usr/bin/postman\" ]; then\n\tsudo rm -f \"/usr/bin/postman\"\nfi" > "postman_$version/DEBIAN/prerm"
 
 echo "Setting modes"
