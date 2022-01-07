@@ -40,9 +40,8 @@ jobs:
             REALM_LOGIN: ${{ secrets.REALM_LOGIN }}
             REALM_PASS: ${{ secrets.REALM_PASS }}
         - name: Upload to Releases
-          uses: AButler/upload-release-assets@v2.0
+          uses: softprops/action-gh-release@v1
           if: startsWith(github.ref, 'refs/tags/')
           with:
             files: postman_${{github.ref_name}}.deb
-            repo-token: ${{ secrets.token }}
-            release-tag: ${{ github.ref_name }}
+            token: ${{ secrets.token }}
