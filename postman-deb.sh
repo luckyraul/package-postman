@@ -5,26 +5,19 @@ if [ -f equal ]; then
   exit 0;
 fi
 
-ls Postman*.tar.gz > /dev/null 2>&1
+ls postman*.tar.gz > /dev/null 2>&1
 if [ $? -eq 0 ]; then
   echo "Removing old Postman tarballs"
-  rm -f $(ls Postman*.tar.gz)
+  rm -f $(ls postman*.tar.gz)
 fi
-
-curlExists=$(command -v curl)
 
 echo "Testing Postman version"
 
-targetName=""
-if [ -z $curlExists ]; then
-  targetName=$(wget -S --spider "https://dl.pstmn.io/download/latest/linux64" 2>&1 | grep "Content-Disposition" | awk -F '=' '{ print $2 }')
-else
-  targetName=$(curl -sI "https://dl.pstmn.io/download/latest/linux64" | grep "content-disposition" | awk -F '=' '{ print $2 }')
-fi
+targetName=$(curl -sI "https://dl.pstmn.io/download/latest/linux64" | grep -i "content-disposition" | awk -F '=' '{ print $2 }')
 
-versionMaj=$(echo "$targetName" | awk -F '-' '{ print $4 }' | awk -F '.' '{ print $1 }')
-versionMin=$(echo "$targetName" | awk -F '-' '{ print $4 }' | awk -F '.' '{ print $2 }')
-versionRev=$(echo "$targetName" | awk -F '-' '{ print $4 }' | awk -F '.' '{ print $3 }')
+versionMaj=$(echo "$targetName" | awk -F '-' '{ print $2 }' | awk -F '.' '{ print $1 }')
+versionMin=$(echo "$targetName" | awk -F '-' '{ print $2 }' | awk -F '.' '{ print $2 }')
+versionRev=$(echo "$targetName" | awk -F '-' '{ print $2 }' | awk -F '.' '{ print $3 }')
 version="$versionMaj.$versionMin.$versionRev"
 echo "Most recent Postman version $version"
 
@@ -44,11 +37,7 @@ fi
 
 echo "Downloading latest Postman tarball"
 
-if [ -z $curlExists ]; then
-  wget -q --show-progress "https://dl.pstmn.io/download/latest/linux64" --content-disposition
-else
-  curl -# "https://dl.pstmn.io/download/latest/linux64" -O -J
-fi
+curl -# "https://dl.pstmn.io/download/latest/linux64" -O -J
 
 if [ $? -gt 0 ]; then
   echo "Failed to download Postman tarball"
@@ -61,7 +50,7 @@ if [ -d "Postman" ]; then
 fi
 
 echo "Extracting Postman tarball"
-tar -xf $(ls Postman*.tar.gz)
+tar -xf $(ls postman*.tar.gz)
 
 if [ $? -gt 0 ]; then
   echo "Failed to extract Postman tarball"
@@ -108,7 +97,7 @@ echo $e "if [ -f \"/usr/bin/postman\" ]; then\n\tsudo rm -f \"/usr/bin/postman\"
 
 echo "Setting modes"
 
-chmod 0775 "postman_$version/usr/share/applications/postman.desktop"
+chmod 0644 "postman_$version/usr/share/applications/postman.desktop"
 
 chmod 0775 "postman_$version/DEBIAN/control"
 chmod 0775 "postman_$version/DEBIAN/postinst"
@@ -137,6 +126,6 @@ if [ $? -gt 0 ]; then
 fi
 
 echo "Cleaning up"
-rm -f $(ls Postman*.tar.gz)
+rm -f $(ls postman*.tar.gz)
 rm -rf "Postman/"
 rm -rf "postman_$version/"
