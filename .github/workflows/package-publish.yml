@@ -15,8 +15,6 @@ jobs:
     steps:
         - name: Checkout Project
           uses: actions/checkout@v1
-        - name: Check Composer
-          run: composer -V
         - name: Check Version
           run: sh check-version.sh
         - name: Download and Build
