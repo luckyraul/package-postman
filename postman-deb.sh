@@ -12,13 +12,9 @@ if [ $? -eq 0 ]; then
 fi
 
 echo "Testing Postman version"
-
-targetName=$(curl -sI "https://dl.pstmn.io/download/latest/linux64" | grep -i "content-disposition" | awk -F '=' '{ print $2 }')
-
-versionMaj=$(echo "$targetName" | awk -F '-' '{ print $2 }' | awk -F '.' '{ print $1 }')
-versionMin=$(echo "$targetName" | awk -F '-' '{ print $2 }' | awk -F '.' '{ print $2 }')
-versionRev=$(echo "$targetName" | awk -F '-' '{ print $2 }' | awk -F '.' '{ print $3 }')
-version="$versionMaj.$versionMin.$versionRev"
+rm -fR Postman
+curl https://dl.pstmn.io/download/latest/linux64 | tar -xz
+version=$(jq -r .version Postman/app/resources/app/package.json)
 echo "Most recent Postman version $version"
 
 current=$(dpkg-query --showformat='${Version}' --show postman 2> /dev/null)
@@ -37,7 +33,7 @@ fi
 
 echo "Downloading latest Postman tarball"
 
-curl -# "https://dl.pstmn.io/download/latest/linux64" -O -J
+curl https://dl.pstmn.io/download/latest/linux64 --output postman.tar.gz
 
 if [ $? -gt 0 ]; then
   echo "Failed to download Postman tarball"
